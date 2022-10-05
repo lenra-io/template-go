@@ -1,0 +1,27 @@
+componentsApi: "1.0"
+generator:
+  dofigen:
+    builders:
+    - name: builder
+      image: golang
+      workdir: /app
+      adds:
+      - "."
+      script:
+      - go mod tidy
+      - go build -ldflags "-s -w" -o counter ./cmd/counter/main.go
+      # copy the generated binary outside of the target directory. If not the other stages won't be able to find it since it's in a cache volume
+      - mv ./counter /tmp/
+      caches:
+      # Go mod cache
+      - /go/pkg
+    image: bitnami/minideb
+    envs:
+      RUST_LOG: debug
+    workdir: /app
+    artifacts:
+    - builder: builder
+      source: "/tmp/counter"
+      destination: "/app/"
+    cmd:
+    - /app/counter
