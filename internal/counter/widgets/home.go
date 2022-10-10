@@ -1,8 +1,23 @@
 package widgets
 
-import "github.com/lenra-io/counter/internal/counter/util"
+import (
+	"context"
 
-func Home() map[string]interface{} {
+	"github.com/lenra-io/counter/internal/counter/services"
+	"github.com/lenra-io/counter/pkg/lenra"
+)
+
+type HomeWidget struct {
+	lenra.BaseWidget
+}
+
+// Ensure that widget follows the interface
+var _ lenra.Widget = HomeWidget{}
+
+// Implementation
+func (w HomeWidget) Name() string { return "home" }
+
+func (w HomeWidget) Render(ctx context.Context) (interface{}, error) {
 	return map[string]interface{}{
 		"type":               "flex",
 		"direction":          "vertical",
@@ -11,23 +26,19 @@ func Home() map[string]interface{} {
 		"crossAxisAlignment": "center",
 		"children": []interface{}{
 			map[string]interface{}{
-				"type": "widget",
-				"name": "counter",
-				"coll": util.COUNTER_COLLECTION,
-				"query": map[string]interface{}{
-					"user": util.CURRENT_USER,
-				},
+				"type":  "widget",
+				"name":  "counter",
+				"coll":  services.Collection(),
+				"query": services.CurrentUserWidgetQuery(),
 				"props": CounterWidgetProps{Text: "My personal counter"},
 			},
 			map[string]interface{}{
-				"type": "widget",
-				"name": "counter",
-				"coll": util.COUNTER_COLLECTION,
-				"query": map[string]interface{}{
-					"user": util.GLOBAL_USER,
-				},
+				"type":  "widget",
+				"name":  "counter",
+				"coll":  services.Collection(),
+				"query": services.GlobalUserWidgetQuery(),
 				"props": CounterWidgetProps{Text: "The common counter"},
 			},
 		},
-	}
+	}, nil
 }

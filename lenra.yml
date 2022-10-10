@@ -17,7 +17,7 @@ generator:
       - /go/pkg
     image: bitnami/minideb
     envs:
-      RUST_LOG: debug
+      LOG_LEVEL: debug
     workdir: /app
     artifacts:
     - builder: builder

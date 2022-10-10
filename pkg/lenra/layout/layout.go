@@ -1,4 +1,4 @@
-package widgets
+package layout
 
 type Padding struct {
 	Top    uint16 `json:"top"`
@@ -21,8 +21,4 @@ type BoxShadow struct {
 type Offset struct {
 	Dx uint16 `json:"dx"`
 	Dy uint16 `json:"dy"`
-}
-
-type CounterWidgetProps struct {
-	Text string `json:"text"`
 }

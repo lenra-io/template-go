@@ -2,6 +2,7 @@ package repo
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -29,10 +30,11 @@ func NewDataRepo(baseUrl, authToken string) *DataRepo {
 }
 
 // API
-func (dr *DataRepo) GetDoc(collection string, id string) ([]byte, error) {
+func (dr *DataRepo) GetDoc(ctx context.Context, collection string, id string) ([]byte, error) {
 	logrus.Debugf("Getting document: %s from collection: %s", id, collection)
 
-	req, err := http.NewRequest(
+	req, err := http.NewRequestWithContext(
+		ctx,
 		http.MethodGet,
 		dr.getUrl(fmt.Sprintf("/app/colls/%s/docs/%s", collection, id)),
 		nil,
@@ -52,14 +54,15 @@ func (dr *DataRepo) GetDoc(collection string, id string) ([]byte, error) {
 	return doc, nil
 }
 
-func (dr *DataRepo) CreateDoc(collection string, document interface{}) (interface{}, error) {
+func (dr *DataRepo) CreateDoc(ctx context.Context, collection string, document interface{}) (interface{}, error) {
 	data, err := json.Marshal(document)
 	if err != nil {
 		return nil, err
 	}
 	logrus.Debugf("Creating document: %s in collection: %s", string(data), collection)
 
-	req, err := http.NewRequest(
+	req, err := http.NewRequestWithContext(
+		ctx,
 		http.MethodPost,
 		dr.getUrl(fmt.Sprintf("/app/colls/%s/docs", collection)),
 		bytes.NewBuffer(data),
@@ -83,13 +86,14 @@ func (dr *DataRepo) CreateDoc(collection string, document interface{}) (interfac
 	return body, nil
 }
 
-func (dr *DataRepo) UpdateDoc(collection string, id string, document interface{}) (interface{}, error) {
+func (dr *DataRepo) UpdateDoc(ctx context.Context, collection string, id string, document interface{}) (interface{}, error) {
 	data, err := json.Marshal(document)
 	if err != nil {
 		return nil, err
 	}
 
-	req, err := http.NewRequest(
+	req, err := http.NewRequestWithContext(
+		ctx,
 		http.MethodPut,
 		dr.getUrl(fmt.Sprintf("/app/colls/%s/docs/%s", collection, id)),
 		bytes.NewBuffer(data),

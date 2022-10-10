@@ -1,12 +1,29 @@
 package widgets
 
-func Menu() map[string]interface{} {
+import (
+	"context"
+
+	"github.com/lenra-io/counter/pkg/lenra"
+	"github.com/lenra-io/counter/pkg/lenra/layout"
+)
+
+type MenuWidget struct {
+	lenra.BaseWidget
+}
+
+// Ensure that widget follows the interface
+var _ lenra.Widget = MenuWidget{}
+
+// Implementation
+func (w MenuWidget) Name() string { return "menu" }
+
+func (w MenuWidget) Render(ctx context.Context) (interface{}, error) {
 	menu_content := map[string]interface{}{
 		"type":               "flex",
 		"fillParent":         true,
 		"mainAxisAlignment":  "spaceBetween",
 		"crossAxisAlignment": "center",
-		"padding":            Padding{Right: 4},
+		"padding":            layout.Padding{Right: 4},
 		"children": []interface{}{
 			map[string]interface{}{
 				"type": "container",
@@ -41,18 +58,18 @@ func Menu() map[string]interface{} {
 
 	return map[string]interface{}{
 		"type": "container",
-		"decoration": Decoration{
+		"decoration": layout.Decoration{
 			Color: 0xFFFFFFFF,
-			BoxShadow: BoxShadow{
+			BoxShadow: layout.BoxShadow{
 				BlurRadius: 8,
 				Color:      0x1A000000,
-				Offset: Offset{
+				Offset: layout.Offset{
 					Dx: 0,
 					Dy: 1,
 				},
 			},
 		},
-		"padding": Padding{Top: 2, Bottom: 2, Left: 4, Right: 4},
+		"padding": layout.Padding{Top: 2, Bottom: 2, Left: 4, Right: 4},
 		"child":   menu_content,
-	}
+	}, nil
 }

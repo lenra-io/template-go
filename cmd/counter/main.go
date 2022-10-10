@@ -2,11 +2,11 @@ package main
 
 import (
 	"bufio"
-	"encoding/json"
-	"fmt"
+	"context"
 	"os"
 
-	"github.com/lenra-io/counter/internal/counter/requests"
+	"github.com/lenra-io/counter/internal/counter"
+	"github.com/lenra-io/counter/pkg/lenra"
 	"github.com/sirupsen/logrus"
 )
 
@@ -24,22 +24,13 @@ func init() {
 }
 
 func main() {
-	var input []byte
+	var request []byte
 
 	scanner := bufio.NewScanner(os.Stdin)
 	if scanner.Scan() {
-		input = scanner.Bytes()
+		request = scanner.Bytes()
 	}
 
-	output, marshal := requests.HandleRootRequest(input)
-
-	if marshal {
-		json_output, err := json.Marshal(output)
-		if err != nil {
-			logrus.Errorf("Internal response return is malformed: %v", output)
-		}
-		fmt.Printf("%s", string(json_output))
-	} else {
-		fmt.Printf("%s", output)
-	}
+	manifest := &counter.Manifest{}
+	lenra.Serve(context.Background(), manifest, request)
 }
