@@ -117,7 +117,7 @@ func serveResource(ctx context.Context, m Manifest, resourceName string, request
 		}
 	}
 	logrus.Debug("Resource %s is not found", resourceName)
-	return nil, fmt.Errorf("widget %s is not found", resourceName)
+	return nil, fmt.Errorf("Resource %s is not found", resourceName)
 }
 
 func renderManifest() interface{} {
