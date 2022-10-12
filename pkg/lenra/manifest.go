@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"strings"
 
 	"github.com/sirupsen/logrus"
 )
@@ -35,7 +36,7 @@ func Serve(ctx context.Context, m Manifest, request []byte) {
 	if err == nil && widget.Widget != "" {
 		renderedWidget, err := serveWidget(ctx, m, widget.Widget, request)
 		if err != nil {
-			render(renderManifest(), true)
+			fmt.Print(err)
 			return
 		} else {
 			render(renderedWidget, true)
@@ -71,6 +72,11 @@ func Serve(ctx context.Context, m Manifest, request []byte) {
 			render(rawResource, false)
 			return
 		}
+	}
+
+	// Request is empty - simply returns a manifest
+	if strings.TrimSpace(string(request)) == "" {
+		render(renderManifest(), true)
 	}
 
 	// No valid
