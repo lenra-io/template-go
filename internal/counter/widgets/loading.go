@@ -14,6 +14,8 @@ type LoadingWidget struct {
 var _ lenra.Widget = LoadingWidget{}
 
 // Implementation
+func (w LoadingWidget) Name() string { return "loading" }
+
 func (w LoadingWidget) Render(ctx context.Context) (interface{}, error) {
 	return map[string]interface{}{
 		"type":  "text",

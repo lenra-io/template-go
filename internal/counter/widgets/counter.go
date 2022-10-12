@@ -54,6 +54,9 @@ func (w CounterWidget) Render(ctx context.Context) (interface{}, error) {
 			},
 		}, nil
 	} else {
-		return LoadingWidget{}.Render(ctx)
+		return map[string]interface{}{
+			"type": "widget",
+			"name": "loading",
+		}, nil
 	}
 }

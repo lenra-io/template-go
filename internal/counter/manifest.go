@@ -19,6 +19,7 @@ func (m *Manifest) Widgets() []lenra.Widget {
 		&widgets.HomeWidget{},
 		&widgets.MenuWidget{},
 		&widgets.CounterWidget{},
+		&widgets.LoadingWidget{},
 	}
 }
 
